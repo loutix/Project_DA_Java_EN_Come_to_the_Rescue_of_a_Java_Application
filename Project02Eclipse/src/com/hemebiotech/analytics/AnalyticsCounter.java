@@ -1,43 +1,76 @@
 package com.hemebiotech.analytics;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class AnalyticsCounter {
-	private static int headacheCount = 0;	// initialize to 0
-	private static int rashCount = 0;		// initialize to 0
-	private static int pupilCount = 0;		// initialize to 0
-	
-	public static void main(String args[]) throws Exception {
-		// first get input
-		BufferedReader reader = new BufferedReader (new FileReader("symptoms.txt"));
-		String line = reader.readLine();
+    public ISymptomReader iSymptomReader;
+    public ISymptomWriter iSymptomWriter;
 
-		int i = 0;	// set i to 0
-		int headCount = 0;	// counts headaches
-		while (line != null) {
-			i++;	// increment i
-			System.out.println("symptom from file: " + line);
-			if (line.equals("headache")) {
-				headCount++;
-				System.out.println("number of headaches: " + headCount);
-			}
-			else if (line.equals("rush")) {
-				rashCount++;
-			}
-			else if (line.contains("pupils")) {
-				pupilCount++;
-			}
+    public AnalyticsCounter(ISymptomReader iSymptomReader, ISymptomWriter iSymptomWriter) {
+        this.iSymptomReader = iSymptomReader;
+        this.iSymptomWriter = iSymptomWriter;
+    }
 
-			line = reader.readLine();	// get another symptom
-		}
-		
-		// next generate output
-		FileWriter writer = new FileWriter ("result.out");
-		writer.write("headache: " + headacheCount + "\n");
-		writer.write("rash: " + rashCount + "\n");
-		writer.write("dialated pupils: " + pupilCount + "\n");
-		writer.close();
-	}
+    /**
+     * Read data from resources adn return a List<String> symptoms
+     *
+     * @return List<String>
+     */
+    public List<String> getSymptoms() {
+        try {
+            return iSymptomReader.getSymptoms();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Count occurrences of each existing symptom
+     *
+     * @param symptoms
+     * @return symptomsOccurrence
+     */
+    public Map<String, Integer> countSymptoms(List<String> symptoms) {
+
+        Map<String, Integer> symptomsOccurrence = new HashMap<>();
+
+        for (String symptom : symptoms) {
+            symptomsOccurrence.putIfAbsent(symptom, 0);
+            symptomsOccurrence.put(symptom, symptomsOccurrence.get(symptom) + 1);
+        }
+
+        return symptomsOccurrence;
+    }
+
+    /**
+     * Sort alphabetically the key of symptoms maps
+     *
+     * @param symptoms
+     * @return symptomsSorted
+     */
+    public Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms) {
+
+        TreeMap<String, Integer> symptomsSorted = new TreeMap<>(symptoms);
+
+        for (Map.Entry<String, Integer> entry : symptomsSorted.entrySet()) {
+            System.out.print(entry.getKey());
+            System.out.println(":" + entry.getValue());
+        }
+        return symptomsSorted;
+    }
+
+    /**
+     * Writes the result in output file
+     *
+     * @param symptoms
+     */
+    public void writeSymptoms(Map<String, Integer> symptoms) throws IOException {
+        iSymptomWriter.writeSymptoms(symptoms);
+    }
+
 }
