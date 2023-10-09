@@ -2,18 +2,25 @@ package com.hemebiotech.analytics;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class AnalyticsCounter {
+public class AnalyticsCounter implements ISymptonCounter {
+
     public ISymptomReader iSymptomReader;
     public ISymptomWriter iSymptomWriter;
 
-    public AnalyticsCounter(ISymptomReader iSymptomReader, ISymptomWriter iSymptomWriter) {
-        this.iSymptomReader = iSymptomReader;
-        this.iSymptomWriter = iSymptomWriter;
+    public AnalyticsCounter(final String SYMPTOMS_FILE_PATH, final String SAVE_FILE_PATH) throws IOException {
+        this.iSymptomReader = new ReadSymptomDataFromFile(SYMPTOMS_FILE_PATH);
+        this.iSymptomWriter = new WriteSymptomDataToFile(SAVE_FILE_PATH);
+
+        // add symptoms in ArrayList
+        List<String> symptomsList = this.getSymptoms();
+        // count symptoms
+        Map<String, Integer> symptomsCounted = this.countSymptoms(symptomsList);
+        // write out file
+        this.writeSymptoms(symptomsCounted);
     }
 
     /**
@@ -29,15 +36,8 @@ public class AnalyticsCounter {
         }
     }
 
-    /**
-     * Count occurrences of each existing symptom
-     *
-     * @param symptoms
-     * @return symptomsOccurrence
-     */
     public Map<String, Integer> countSymptoms(List<String> symptoms) {
-
-        Map<String, Integer> symptomsOccurrence = new HashMap<>();
+        Map<String, Integer> symptomsOccurrence = new TreeMap<>();
 
         for (String symptom : symptoms) {
             symptomsOccurrence.putIfAbsent(symptom, 0);
@@ -48,23 +48,6 @@ public class AnalyticsCounter {
     }
 
     /**
-     * Sort alphabetically the key of symptoms maps
-     *
-     * @param symptoms
-     * @return symptomsSorted
-     */
-    public Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms) {
-
-        TreeMap<String, Integer> symptomsSorted = new TreeMap<>(symptoms);
-
-        for (Map.Entry<String, Integer> entry : symptomsSorted.entrySet()) {
-            System.out.print(entry.getKey());
-            System.out.println(":" + entry.getValue());
-        }
-        return symptomsSorted;
-    }
-
-    /**
      * Writes the result in output file
      *
      * @param symptoms
@@ -72,5 +55,4 @@ public class AnalyticsCounter {
     public void writeSymptoms(Map<String, Integer> symptoms) throws IOException {
         iSymptomWriter.writeSymptoms(symptoms);
     }
-
 }

@@ -11,41 +11,42 @@ import java.util.List;
 
 public class ReadSymptomDataFromFile implements ISymptomReader {
 
-    private String filepath;
+    private final String FILEPATH;
 
     /**
-     * @param filepath
+     * @param FILEPATH
      */
-    public ReadSymptomDataFromFile(String filepath) {
-        this.filepath = filepath;
+    public ReadSymptomDataFromFile(String FILEPATH) throws FileNotFoundException {
+
+        if (FILEPATH == null || FILEPATH.isEmpty()) {
+            throw new FileNotFoundException("Erreur le path du fichier est null ou vide");
+        }
+
+        this.FILEPATH = FILEPATH;
     }
 
     /**
      * Read data from resources adn return a List<String> symptoms
      *
-     * @return  ArrayList<String> symptomsList
-     * @throws FileNotFoundException
+     * @return ArrayList<String> symptomsList
      */
 
     @Override
-    public List<String> getSymptoms() throws FileNotFoundException {
+    public List<String> getSymptoms() {
         ArrayList<String> symptomsList = new ArrayList<String>();
 
-        if (filepath != null) {
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(filepath));
-                String line = reader.readLine();
-                while (line != null) {
-                    symptomsList.add(line);
-                    line = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException e) {
-                throw new RuntimeException("Erreur lors de la lecture du fichier", e);
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(FILEPATH));
+            String line = reader.readLine();
+            while (line != null) {
+                symptomsList.add(line);
+                line = reader.readLine();
             }
-        } else {
-            throw new FileNotFoundException("Erreur fichier non trouvé");
+            reader.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Erreur lors de la lecture du fichier");
         }
+
         return symptomsList;
     }
 
