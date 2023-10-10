@@ -7,7 +7,7 @@ public interface ISymptonCounter {
     /**
      * Count occurrences of each existing symptom
      *
-     * @param symptoms
+     * @param symptoms<String> symptoms
      * @return symptomsOccurrence
      */
     public Map<String, Integer> countSymptoms(List<String> symptoms);

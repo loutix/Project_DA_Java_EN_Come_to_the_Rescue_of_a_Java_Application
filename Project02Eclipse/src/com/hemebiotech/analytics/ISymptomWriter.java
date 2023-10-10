@@ -13,8 +13,7 @@ public interface ISymptomWriter {
     /**
      * write the contains of the map on out file
      *
-     * @param symptoms
-     * @throws IOException
+     * @param symptoms<> symptom
      */
     public void writeSymptoms(Map<String, Integer> symptoms) throws IOException;
 }

@@ -36,6 +36,12 @@ public class AnalyticsCounter implements ISymptonCounter {
         }
     }
 
+    /**
+     * Count and sort symptoms occurrences
+     * @param symptoms<String> symptoms
+     * @return Map<String, Integer> symptomsOccurrence
+     */
+
     public Map<String, Integer> countSymptoms(List<String> symptoms) {
         Map<String, Integer> symptomsOccurrence = new TreeMap<>();
 
@@ -48,11 +54,11 @@ public class AnalyticsCounter implements ISymptonCounter {
     }
 
     /**
-     * Writes the result in output file
      *
-     * @param symptoms
+     * @param symptoms<> symptoms
      */
     public void writeSymptoms(Map<String, Integer> symptoms) throws IOException {
         iSymptomWriter.writeSymptoms(symptoms);
     }
+
 }
