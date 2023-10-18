@@ -15,5 +15,5 @@ public interface ISymptomWriter {
      *
      * @param symptoms<> symptom
      */
-    public void writeSymptoms(Map<String, Integer> symptoms) throws IOException;
+    void writeSymptoms(Map<String, Integer> symptoms) throws IOException;
 }

@@ -36,7 +36,7 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 
     @Override
     public List<String> getSymptoms() {
-        ArrayList<String> symptomsList = new ArrayList<String>();
+        List<String> symptomsList = new ArrayList<String>();
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filePath));
