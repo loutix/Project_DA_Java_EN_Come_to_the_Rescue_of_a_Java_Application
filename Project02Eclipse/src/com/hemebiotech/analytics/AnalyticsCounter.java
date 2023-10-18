@@ -4,59 +4,45 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-public class AnalyticsCounter implements ISymptonCounter {
+public class AnalyticsCounter {
 
-    public ISymptomReader iSymptomReader;
-    public ISymptomWriter iSymptomWriter;
+    private final ISymptomReader iSymptomReader;
+    private final ISymptomCounter iSymptomCounter;
+    private final ISymptomWriter iSymptomWriter;
 
-    public AnalyticsCounter(final String SYMPTOMS_FILE_PATH, final String SAVE_FILE_PATH) throws IOException {
-        this.iSymptomReader = new ReadSymptomDataFromFile(SYMPTOMS_FILE_PATH);
-        this.iSymptomWriter = new WriteSymptomDataToFile(SAVE_FILE_PATH);
-
-        // add symptoms in ArrayList
-        List<String> symptomsList = this.getSymptoms();
-        // count symptoms
-        Map<String, Integer> symptomsCounted = this.countSymptoms(symptomsList);
-        // write out file
-        this.writeSymptoms(symptomsCounted);
+    public AnalyticsCounter(final String symptomsFilePath, final String directoryPath) throws IOException {
+        this.iSymptomReader = new ReadSymptomDataFromFile(symptomsFilePath);
+        this.iSymptomCounter = new CountSymptomData();
+        this.iSymptomWriter = new WriteSymptomDataToFile(directoryPath);
     }
 
     /**
-     * Read data from resources adn return a List<String> symptoms
+     * Read data from resources and return a List<String> symptoms
      *
      * @return List<String>
      */
-    public List<String> getSymptoms() {
-        try {
-            return iSymptomReader.getSymptoms();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+
+    public List<String> getSymptoms() throws FileNotFoundException {
+        return iSymptomReader.getSymptoms();
     }
 
     /**
-     * Count and sort symptoms occurrences
-     * @param symptoms<String> symptoms
-     * @return Map<String, Integer> symptomsOccurrence
+     * Count occurrences of each existing symptom
+     *
+     * @param symptomsList<String> symptomsList symptoms
+     * @return Map<String, Integer>
      */
-
-    public Map<String, Integer> countSymptoms(List<String> symptoms) {
-        Map<String, Integer> symptomsOccurrence = new TreeMap<>();
-
-        for (String symptom : symptoms) {
-            symptomsOccurrence.putIfAbsent(symptom, 0);
-            symptomsOccurrence.put(symptom, symptomsOccurrence.get(symptom) + 1);
-        }
-
-        return symptomsOccurrence;
+    public Map<String, Integer> countSymptoms(List<String> symptomsList) {
+        return this.iSymptomCounter.countSymptoms(symptomsList);
     }
 
     /**
+     * write the contains of the map on out file
      *
      * @param symptoms<> symptoms
      */
+
     public void writeSymptoms(Map<String, Integer> symptoms) throws IOException {
         iSymptomWriter.writeSymptoms(symptoms);
     }

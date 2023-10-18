@@ -11,22 +11,25 @@ import java.util.List;
 
 public class ReadSymptomDataFromFile implements ISymptomReader {
 
-    private final String FILEPATH;
+    private final String filePath;
 
     /**
-     * @param FILEPATH
+     * Control if path is null or empty
+     *
+     * @param filePath
+     * @throws FileNotFoundException
      */
-    public ReadSymptomDataFromFile(String FILEPATH) throws FileNotFoundException {
+    public ReadSymptomDataFromFile(String filePath) throws FileNotFoundException {
 
-        if (FILEPATH == null || FILEPATH.isEmpty()) {
+        if (filePath == null || filePath.isEmpty()) {
             throw new FileNotFoundException("Erreur le path du fichier est null ou vide");
         }
 
-        this.FILEPATH = FILEPATH;
+        this.filePath = filePath;
     }
 
     /**
-     * Read data from resources adn return a List<String> symptoms
+     * Read data from resources and return a List<String> symptoms
      *
      * @return ArrayList<String> symptomsList
      */
@@ -36,7 +39,7 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
         ArrayList<String> symptomsList = new ArrayList<String>();
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(FILEPATH));
+            BufferedReader reader = new BufferedReader(new FileReader(filePath));
             String line = reader.readLine();
             while (line != null) {
                 symptomsList.add(line);

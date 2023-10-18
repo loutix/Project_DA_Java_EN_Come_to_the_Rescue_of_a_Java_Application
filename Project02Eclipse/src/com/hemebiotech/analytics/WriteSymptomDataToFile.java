@@ -8,14 +8,19 @@ import java.util.Map;
 public class WriteSymptomDataToFile implements ISymptomWriter {
 
 
-    private final String SAVE_FILE_PATH;
+    private final String directoryPath;
 
-    public WriteSymptomDataToFile(String SAVE_FILE_PATH) {
+    /**
+     * Control if path is null or empty
+     *
+     * @param directoryPath
+     */
+    public WriteSymptomDataToFile(String directoryPath) {
 
-        if (SAVE_FILE_PATH == null || SAVE_FILE_PATH.isEmpty()) {
+        if (directoryPath == null || directoryPath.isEmpty()) {
             throw new NullPointerException("Erreur le path directory est null ou vide");
         }
-        this.SAVE_FILE_PATH = SAVE_FILE_PATH;
+        this.directoryPath = directoryPath;
     }
 
     @Override
