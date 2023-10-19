@@ -26,23 +26,20 @@ public class WriteSymptomDataToFile implements ISymptomWriter {
     @Override
     public void writeSymptoms(Map<String, Integer> symptoms) throws IOException {
 
-        File directory = new File(directoryPath);
+        File path = new File(directoryPath);
 
-        //Create the directory if not found
-        directory.mkdir();
+        if(!path.exists()){
+            path.getParentFile().mkdir();
+        }
 
-        try (FileWriter writer = new FileWriter(new File(directory, "result.out"))) {
+        FileWriter writer = new FileWriter(directoryPath);
 
-            for (Map.Entry<String, Integer> entry : symptoms.entrySet()) {
-                final String line = entry.getKey() + ":" + entry.getValue();
+        for (Map.Entry<String, Integer> entry : symptoms.entrySet()) {
+            final String line = entry.getKey() + ":" + entry.getValue();
 
-                System.out.println(line);
+            System.out.println(line);
 
-                writer.write(line + "\n");
-            }
-
-        } catch (IOException e) {
-            throw new RuntimeException("Erreur lors de l'écriture du fichier");
+            writer.write(line + "\n");
         }
     }
 }

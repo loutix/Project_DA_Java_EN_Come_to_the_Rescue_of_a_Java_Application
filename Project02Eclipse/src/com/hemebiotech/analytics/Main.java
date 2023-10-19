@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-    final static String SYMPTOMS_FILE_PATH = ".\\src\\resources\\symptoms.txt";
-    final static String DIRECTORY_PATH = ".\\src\\writer";
+    final static String SYMPTOMS_FILE_PATH = "src\\resources\\symptoms.txt";
+    final static String DIRECTORY_PATH = "src\\writer\\result.out";
 
 
     public static void main(String[] args) throws IOException {
-        AnalyticsCounter analyticsCounter = new AnalyticsCounter(SYMPTOMS_FILE_PATH, DIRECTORY_PATH);
+        final AnalyticsCounter analyticsCounter = new AnalyticsCounter(SYMPTOMS_FILE_PATH, DIRECTORY_PATH);
 
         // add symptoms in ArrayList
         final List<String> symptomsList = analyticsCounter.getSymptoms();
