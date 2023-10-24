@@ -40,6 +40,8 @@ public class WriteSymptomDataToFile implements ISymptomWriter {
             System.out.println(line);
 
             writer.write(line + "\n");
+
         }
+        writer.close();
     }
 }
